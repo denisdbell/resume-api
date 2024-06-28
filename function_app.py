@@ -18,7 +18,7 @@ import json
 #KVUri = f"https://{keyVaultName}.vault.azure.net"
 
 ##credential = DefaultAzureCredential()
-##client = SecretClient(vault_url=KVUri, credential=credential)
+##client = SecretClient(va ult_url=KVUri, credential=credential)
 
 
 
