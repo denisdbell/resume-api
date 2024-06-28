@@ -17,7 +17,7 @@ variables:
   vmImageName: 'ubuntu-latest'
 
   # Working Directory
-  workingDirectory: 'work'
+  workingDirectory: $(System.DefaultWorkingDirectory)
 
 stages:
 - stage: Build
