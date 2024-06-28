@@ -20,37 +20,34 @@ import json
 ##credential = DefaultAzureCredential()
 ##client = SecretClient(vault_url=KVUri, credential=credential)
 
-DB_HOST = os.environ["PGHOST"]
-DB_USER = os.environ["PGUSER"]
-DB_PASSWORD = os.environ["PGPASSWORD"]
-DB_NAME = os.environ["PGDATABASE"]
-DB_PORT = os.environ["PGPORT"]
 
-# Connect to the PostgreSQL database
-def get_db_connection():
-    conn = psycopg2.connect(
-        host=DB_HOST,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        dbname=DB_NAME,
-        port=DB_PORT
-    )
-    return conn
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.route(route="http_trigger")
 def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
     #logging.info('Python HTTP trigger function processed a request.')
-    conn = get_db_connection()
+    DB_HOST = os.environ["PGHOST"]
+    DB_USER = os.environ["PGUSER"]
+    DB_PASSWORD = os.environ["PGPASSWORD"]
+    DB_NAME = os.environ["PGDATABASE"]
+    DB_PORT = os.environ["PGPORT"]
+
+    conn = conn = psycopg2.connect(
+        host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        dbname=DB_NAME,
+        port=DB_PORT
+    )
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     success = True
     count = ""
     try:
         ##Insert visitor
         visit_id = str(uuid.uuid4())
-        visitor_ip = req.headers.get("X-FORWARDED-FOR")
-        #visitor_ip = "TESTIP"
+        #visitor_ip = req.headers.get("X-FORWARDED-FOR")
+        visitor_ip = "TESTIP"
         sql = "INSERT INTO public.resume_visitor_counter (visitor_ip, visit_time, visit_id) VALUES ('"+ visitor_ip +"',now(),'"+ visit_id +"')"
         print(sql)
         #logging.info('Adding visitor ' + visit_id)
@@ -64,7 +61,7 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
     except Exception as e:
         success = False
         conn.rollback()
-    # raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
     finally:
         cursor.close()
         conn.close()
