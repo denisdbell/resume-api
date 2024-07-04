@@ -17,7 +17,7 @@ variables:
   vmImageName: 'ubuntu-latest'
 
   # Working Directory
-  workingDirectory: 'work'
+  workingDirectory: $(System.DefaultWorkingDirectory)
 
 stages:
 - stage: Build
@@ -41,7 +41,7 @@ stages:
     - task: UsePythonVersion@0
       displayName: 'Use Python 3.6'
       inputs:
-        versionSpec: 3.6 # Functions V2 supports Python 3.6 as of today
+        versionSpec: 3.10.14 # Functions V2 supports Python
 
     - bash: |
         pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
