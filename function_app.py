@@ -27,6 +27,7 @@ DB_NAME = os.environ["PGDATABASE"]
 DB_PORT = os.environ["PGPORT"]
 
 # Connect to the PostgreSQL database
+'''
 def get_db_connection():
     conn = psycopg2.connect(
         host=DB_HOST,
@@ -36,6 +37,7 @@ def get_db_connection():
         port=DB_PORT
     )
     return conn
+'''
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 @app.route(route="http_trigger")
